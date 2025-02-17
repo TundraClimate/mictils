@@ -76,6 +76,27 @@ pub trait Bind {
     /// // assert_eq!("hi, world!", text);
     /// # }
     /// ```
+    ///
+    /// Bond ownership to a closure:
+    /// ```rust
+    /// # use mictils::Bind;
+    /// let rwlock = std::sync::RwLock::new(String::from("HhEellOo"));
+    ///
+    /// /*
+    /// {
+    ///     let mut w = rwlock.write().unwrap();
+    ///     w.retain(|c| !c.is_uppercase());
+    ///     w.push_str(", world");
+    /// }
+    /// */
+    ///
+    /// rwlock.write().unwrap().bind(|mut w| {
+    ///     w.retain(|c| !c.is_uppercase());
+    ///     w.push_str(", world");
+    /// });
+    ///
+    /// assert_eq!(String::from("hello, world"), *rwlock.read().unwrap());
+    /// ```
     fn bind<R, F: FnOnce(Self) -> R>(self, f: F) -> R
     where
         Self: Sized,
