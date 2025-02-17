@@ -205,4 +205,24 @@ mod tests {
 
         assert_eq!(String::from("Hello, World"), hold);
     }
+
+    #[test]
+    fn bind_lock_write() {
+        let rwlock = std::sync::RwLock::new(String::from("HhEellOo"));
+
+        /*
+        {
+            let mut w = rwlock.write().unwrap();
+            w.retain(|c| !c.is_uppercase());
+            w.push_str(", world");
+        }
+        */
+
+        rwlock.write().unwrap().bind(|mut w| {
+            w.retain(|c| !c.is_uppercase());
+            w.push_str(", world");
+        });
+
+        assert_eq!(String::from("hello, world"), *rwlock.read().unwrap());
+    }
 }
