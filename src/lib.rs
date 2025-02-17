@@ -8,39 +8,34 @@
 /// # Examples
 /// Hash is implemented by default:
 /// ```rust
-/// # fn main() {
 /// use mictils::HashCode;
 ///
 /// let str1 = String::from("foo");
 /// let str2 = String::from("foo");
 ///
 /// assert_eq!(str1.hashcode(), str2.hashcode());
-/// # }
 /// ```
 pub trait HashCode {
     /// Java-like hasher function.
     ///
     /// Basic uses:
     /// ```rust
-    /// # fn main() {
     /// # use mictils::HashCode;
     /// let text = String::from("HashCode");
     ///
     /// assert_eq!(17255704455115175831, text.hashcode());
-    /// # }
     /// ```
     ///
     /// Advanced uses:
     /// ```rust
-    /// # fn main() {
-    /// #   assert!(hash_eq(12, 12));
-    /// # }
     /// use mictils::HashCode;
     /// use std::hash::Hash;
     ///
     /// fn hash_eq<H: Hash + HashCode>(a: H, b: H) -> bool {
     ///     a.hashcode() == b.hashcode()
     /// }
+    ///
+    /// assert!(hash_eq(12, 12));
     /// ```
     fn hashcode(&self) -> u64;
 }
@@ -65,7 +60,6 @@ pub trait Bind {
     /// By "consuming" ownership, you can avoid the risk of unnecessary variables being used.
     ///
     /// ```rust
-    /// # fn main() {
     /// # use mictils::Bind;
     /// let text = String::from("hi, world!");
     /// let bind = text.bind(|s| s.to_ascii_uppercase()); // text is moved
@@ -74,7 +68,6 @@ pub trait Bind {
     ///
     /// // COMPILE ERROR!
     /// // assert_eq!("hi, world!", text);
-    /// # }
     /// ```
     ///
     /// Bond ownership to a closure:
@@ -117,10 +110,8 @@ pub trait Hold {
     /// It similar the iterator `inspect`.
     ///
     /// ```rust
-    /// # fn main() {
     /// # use mictils::Hold;
     /// let value = String::from("UTF-8 encoded").hold_ref(|s| println!("{s}"));
-    /// # }
     /// ```
     fn hold_ref<F: FnOnce(&Self)>(self, f: F) -> Self
     where
@@ -133,12 +124,10 @@ pub trait Hold {
     /// This is useful when initializing self.
     ///
     /// ```rust
-    /// # fn main() {
     /// # use mictils::Hold;
     /// let text = String::from("Hello").hold(|s| s.push_str(", World"));
     ///
     /// assert_eq!(String::from("Hello, World"), text);
-    /// # }
     /// ```
     fn hold<F: FnOnce(&mut Self)>(mut self, f: F) -> Self
     where
