@@ -1,6 +1,8 @@
 #![warn(missing_docs)]
 //! mictils is util crate that contains various functions.
 
+pub mod prelude;
+
 /// Proveide instant hasher.
 ///
 /// Types implementing [Hash](std::hash::Hash) are able to be instant-hash.
