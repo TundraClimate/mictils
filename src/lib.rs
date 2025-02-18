@@ -3,7 +3,7 @@
 
 /// Proveide instant hasher.
 ///
-/// Types implementing `Hash` are able to be instant-hash.
+/// Types implementing [Hash](std::hash::Hash) are able to be instant-hash.
 ///
 /// # Examples
 /// Hash is implemented by default:
@@ -55,7 +55,7 @@ impl<T: std::hash::Hash> HashCode for T {
 ///
 /// Takes ownership and returns the closure return value.
 ///
-/// It similar the `map`. but not only iterator.
+/// It similar the [map](std::iter::Map). but not only iterator.
 pub trait Bind {
     /// By "consuming" ownership, you can avoid the risk of unnecessary variables being used.
     ///
@@ -107,7 +107,7 @@ impl<T> Bind for T {}
 ///
 /// **Caution**: closure does **not** return a value.
 pub trait Hold {
-    /// It similar the iterator `inspect`.
+    /// It similar the iterator [inspect](std::iter::Inspect).
     ///
     /// ```rust
     /// # use mictils::Hold;
