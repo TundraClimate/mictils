@@ -140,6 +140,25 @@ pub trait Hold {
 
 impl<T> Hold for T {}
 
+/// Impl [exists_symlink](crate::SymlinkExists::exists_symlink) for [PathBuf](std::path::PathBuf), [Path](std::path::Path) and etc.
+///
+/// [exists](std::path::Path::exists) follows the symlink and returns the value,  
+/// but [exists_symlink](crate::SymlinkExists::exists_symlink) does not follow it and returns the exists of the file itself.
+pub trait SymlinkExists {
+    /// Get the exists of the file without following symlinks.
+    fn exists_symlink(&self) -> bool;
+}
+
+impl<T> SymlinkExists for T
+where
+    T: std::ops::Deref<Target = std::path::Path>,
+{
+    fn exists_symlink(&self) -> bool {
+        self.symlink_metadata()
+            .is_ok_and(|m| m.is_symlink() || self.exists())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
