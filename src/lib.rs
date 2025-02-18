@@ -161,6 +161,47 @@ where
     }
 }
 
+/// Protect your `if .. else` code from `cargo fmt`
+///
+/// Has this happened:
+/// ```rust,ignore
+/// let value = if too_long_long_bool_value { 1 } else { 2 };
+///
+/// // After `cargo fmt`
+/// let value = if too_long_long_bool_value {
+///     1
+/// } else {
+///     2
+/// };
+/// ```
+///
+/// **Oh, NO!** Its not **COOL**!
+///
+/// However:
+/// ```rust,ignore
+/// let value = too_long_long_bool_value.which(1, 2);
+///
+/// // After `cargo fmt`
+/// let value = too_long_long_bool_value
+///     .which(1, 2);
+/// ```
+///
+/// So, **COOL**.
+pub trait Which<R> {
+    /// if .. else wrapper.
+    fn which(self, t: R, f: R) -> R;
+}
+
+impl<R> Which<R> for bool {
+    fn which(self, t: R, f: R) -> R {
+        if self {
+            t
+        } else {
+            f
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -255,5 +296,16 @@ mod tests {
         });
 
         assert_eq!(String::from("hello, world"), *rwlock.read().unwrap());
+    }
+
+    #[test]
+    fn which_value() {
+        let val1 = true.which(1, 2);
+
+        assert_eq!(1, val1);
+
+        let val2 = false.which(1, 2);
+
+        assert_eq!(2, val2);
     }
 }
